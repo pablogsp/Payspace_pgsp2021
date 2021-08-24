@@ -119,6 +119,16 @@ namespace Payspace_NextGen.Controllers
                     Recibo="",
                     Status=0
                 });
+                await aPIPendenciaEsocials.Post(new PendenciaEsocial()
+                {
+                    DataHora = DateTime.Now,
+                    Description = "Folha" + calculation.Month.ToString() + "/" + calculation.Year.ToString(),
+                    Id = aPIPendenciaEsocials.GetAPIPendenciaEsocials().Count() + 1,
+                    Layout = "S-1210",
+                    Mensage = "Pagamento mensal, CPF:" + item.CPF + ".",
+                    Recibo = "",
+                    Status = 0
+                });
             }
             return CreatedAtRoute("DefaultApi", new { },new object());
         }
