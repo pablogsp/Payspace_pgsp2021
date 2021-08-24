@@ -1,0 +1,15 @@
+﻿Generated model file: Payspace_BR.edmx.
+Loading metadata from the database took 00:00:01.6751854.
+Generating the model took 00:00:02.3400813.
+Generated model file: Payspace_BR.edmx.
+Loading metadata from the database took 00:00:01.3490370.
+Generating the model took 00:00:01.9204202.
+Generated model file: Payspace_BR.edmx.
+Loading metadata from the database took 00:00:01.5410059.
+Generating the model took 00:00:02.1757335.
+Generated model file: Payspace_BR.edmx.
+Loading metadata from the database took 00:00:02.0638135.
+Generating the model took 00:00:03.4898772.
+Generated model file: Payspace_BR.edmx.
+Loading metadata from the database took 00:00:01.3031968.
+Generating the model took 00:00:02.0088636.

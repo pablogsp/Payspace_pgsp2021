@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f54f0054b614477980f360a3cc8aa7c9" Name="Diagram1" ZoomLevel="138">
+        <EntityTypeShape EntityType="localdbModel.Calculation" Width="1.5" PointX="5.25" PointY="5" />
+        <EntityTypeShape EntityType="localdbModel.calculationDetail" Width="1.5" PointX="7.5" PointY="1" />
+        <EntityTypeShape EntityType="localdbModel.Employe" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="localdbModel.PostCode" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="localdbModel.Type" Width="1.5" PointX="0.75" PointY="1.375" />
+        <AssociationConnector Association="localdbModel.FK_calculationDetails_Calculation" />
+        <AssociationConnector Association="localdbModel.FK_calculationDetails_Employe" />
+        <AssociationConnector Association="localdbModel.FK_Employe_PostCode" />
+        <AssociationConnector Association="localdbModel.FK_PostCode_type" />
+        <EntityTypeShape EntityType="localdbModel.RateValue" Width="1.5" PointX="2" PointY="4.5" />
+        <AssociationConnector Association="localdbModel.FK_RateValues_Type" />
+        <EntityTypeShape EntityType="localdbModel.PendenciaEsocial" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="localdbModel.Esocial_Layout" Width="1.5" PointX="4.5" PointY="7.75" />
+        <AssociationConnector Association="localdbModel.FK_PendenciaEsocial_ToTable" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

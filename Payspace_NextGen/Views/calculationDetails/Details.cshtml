@@ -1,0 +1,50 @@
+﻿@model Payspace_NextGen.Models.calculationDetail
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>calculationDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DetailName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DetailName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DetailValue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DetailValue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calculation.NamePayment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calculation.NamePayment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Employe.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employe.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

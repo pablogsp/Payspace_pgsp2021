@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Payspace_NextGen.Models.Employe>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SocialName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Salary)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostCode.PostCodeName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SocialName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Salary)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PostCode.PostCodeName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CPF }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CPF }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CPF })
+        </td>
+    </tr>
+}
+
+</table>

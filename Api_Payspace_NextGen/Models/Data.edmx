@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="localdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Calculation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="NamePayment" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="calculationDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeID" Type="nvarchar" MaxLength="14" Nullable="false" />
+          <Property Name="DetailName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DetailValue" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="IdCalculation" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employe">
+          <Key>
+            <PropertyRef Name="CPF" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="SocialName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="CPF" Type="nvarchar" MaxLength="14" Nullable="false" />
+          <Property Name="PostCodeId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Salary" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PostCodeName" Type="nchar" MaxLength="10" />
+          <Property Name="TaxRateId" Type="int" />
+        </EntityType>
+        <EntityType Name="TaxRate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="NameTax" Type="nvarchar" MaxLength="100" />
+          <Property Name="TypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="TaxRateDetail">
+          <Key>
+            <PropertyRef Name="IdTaxRate" />
+            <PropertyRef Name="From" />
+          </Key>
+          <Property Name="IdTaxRate" Type="int" Nullable="false" />
+          <Property Name="From" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="To" Type="numeric" Precision="18" Scale="4" />
+          <Property Name="Rate" Type="numeric" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="TypeTax">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TaxType" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_calculationDetails_Calculation">
+          <End Role="Calculation" Type="Self.Calculation" Multiplicity="1" />
+          <End Role="calculationDetails" Type="Self.calculationDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calculation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="calculationDetails">
+              <PropertyRef Name="IdCalculation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calculationDetails_Employe">
+          <End Role="Employe" Type="Self.Employe" Multiplicity="1" />
+          <End Role="calculationDetails" Type="Self.calculationDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employe">
+              <PropertyRef Name="CPF" />
+            </Principal>
+            <Dependent Role="calculationDetails">
+              <PropertyRef Name="EmployeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employe_PostCode">
+          <End Role="PostCode" Type="Self.PostCode" Multiplicity="1" />
+          <End Role="Employe" Type="Self.Employe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employe">
+              <PropertyRef Name="PostCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostCode_TaxRate">
+          <End Role="TaxRate" Type="Self.TaxRate" Multiplicity="0..1" />
+          <End Role="PostCode" Type="Self.PostCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxRate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostCode">
+              <PropertyRef Name="TaxRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxRate_TypeTaxRate">
+          <End Role="TypeTax" Type="Self.TypeTax" Multiplicity="0..1" />
+          <End Role="TaxRate" Type="Self.TaxRate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeTax">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxRate">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxRateDetail_TaxRate">
+          <End Role="TaxRate" Type="Self.TaxRate" Multiplicity="1" />
+          <End Role="TaxRateDetail" Type="Self.TaxRateDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxRate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxRateDetail">
+              <PropertyRef Name="IdTaxRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="localdbModelStoreContainer">
+          <EntitySet Name="Calculation" EntityType="Self.Calculation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="calculationDetails" EntityType="Self.calculationDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employe" EntityType="Self.Employe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostCode" EntityType="Self.PostCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaxRate" EntityType="Self.TaxRate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaxRateDetail" EntityType="Self.TaxRateDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeTax" EntityType="Self.TypeTax" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_calculationDetails_Calculation" Association="Self.FK_calculationDetails_Calculation">
+            <End Role="Calculation" EntitySet="Calculation" />
+            <End Role="calculationDetails" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calculationDetails_Employe" Association="Self.FK_calculationDetails_Employe">
+            <End Role="Employe" EntitySet="Employe" />
+            <End Role="calculationDetails" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employe_PostCode" Association="Self.FK_Employe_PostCode">
+            <End Role="PostCode" EntitySet="PostCode" />
+            <End Role="Employe" EntitySet="Employe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostCode_TaxRate" Association="Self.FK_PostCode_TaxRate">
+            <End Role="TaxRate" EntitySet="TaxRate" />
+            <End Role="PostCode" EntitySet="PostCode" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxRate_TypeTaxRate" Association="Self.FK_TaxRate_TypeTaxRate">
+            <End Role="TypeTax" EntitySet="TypeTax" />
+            <End Role="TaxRate" EntitySet="TaxRate" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxRateDetail_TaxRate" Association="Self.FK_TaxRateDetail_TaxRate">
+            <End Role="TaxRate" EntitySet="TaxRate" />
+            <End Role="TaxRateDetail" EntitySet="TaxRateDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="localdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Calculation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="NamePayment" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="calculationDetails" Relationship="Self.FK_calculationDetails_Calculation" FromRole="Calculation" ToRole="calculationDetails" />
+        </EntityType>
+        <EntityType Name="calculationDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeID" Type="String" MaxLength="14" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DetailName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DetailValue" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="IdCalculation" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Calculation" Relationship="Self.FK_calculationDetails_Calculation" FromRole="calculationDetails" ToRole="Calculation" />
+          <NavigationProperty Name="Employe" Relationship="Self.FK_calculationDetails_Employe" FromRole="calculationDetails" ToRole="Employe" />
+        </EntityType>
+        <EntityType Name="Employe">
+          <Key>
+            <PropertyRef Name="CPF" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SocialName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CPF" Type="String" MaxLength="14" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PostCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Salary" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <NavigationProperty Name="calculationDetails" Relationship="Self.FK_calculationDetails_Employe" FromRole="Employe" ToRole="calculationDetails" />
+          <NavigationProperty Name="PostCode" Relationship="Self.FK_Employe_PostCode" FromRole="Employe" ToRole="PostCode" />
+        </EntityType>
+        <EntityType Name="PostCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PostCodeName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="TaxRateId" Type="Int32" />
+          <NavigationProperty Name="Employes" Relationship="Self.FK_Employe_PostCode" FromRole="PostCode" ToRole="Employe" />
+          <NavigationProperty Name="TaxRate" Relationship="Self.FK_PostCode_TaxRate" FromRole="PostCode" ToRole="TaxRate" />
+        </EntityType>
+        <EntityType Name="TaxRate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="NameTax" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeId" Type="Int32" />
+          <NavigationProperty Name="PostCodes" Relationship="Self.FK_PostCode_TaxRate" FromRole="TaxRate" ToRole="PostCode" />
+          <NavigationProperty Name="TypeTax" Relationship="Self.FK_TaxRate_TypeTaxRate" FromRole="TaxRate" ToRole="TypeTax" />
+          <NavigationProperty Name="TaxRateDetails" Relationship="Self.FK_TaxRateDetail_TaxRate" FromRole="TaxRate" ToRole="TaxRateDetail" />
+        </EntityType>
+        <EntityType Name="TaxRateDetail">
+          <Key>
+            <PropertyRef Name="IdTaxRate" />
+            <PropertyRef Name="From" />
+          </Key>
+          <Property Name="IdTaxRate" Type="Int32" Nullable="false" />
+          <Property Name="From" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="To" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="TaxRate" Relationship="Self.FK_TaxRateDetail_TaxRate" FromRole="TaxRateDetail" ToRole="TaxRate" />
+        </EntityType>
+        <EntityType Name="TypeTax">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TaxType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TaxRates" Relationship="Self.FK_TaxRate_TypeTaxRate" FromRole="TypeTax" ToRole="TaxRate" />
+        </EntityType>
+        <Association Name="FK_calculationDetails_Calculation">
+          <End Role="Calculation" Type="Self.Calculation" Multiplicity="1" />
+          <End Role="calculationDetails" Type="Self.calculationDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calculation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="calculationDetails">
+              <PropertyRef Name="IdCalculation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calculationDetails_Employe">
+          <End Role="Employe" Type="Self.Employe" Multiplicity="1" />
+          <End Role="calculationDetails" Type="Self.calculationDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employe">
+              <PropertyRef Name="CPF" />
+            </Principal>
+            <Dependent Role="calculationDetails">
+              <PropertyRef Name="EmployeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employe_PostCode">
+          <End Role="PostCode" Type="Self.PostCode" Multiplicity="1" />
+          <End Role="Employe" Type="Self.Employe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employe">
+              <PropertyRef Name="PostCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostCode_TaxRate">
+          <End Role="TaxRate" Type="Self.TaxRate" Multiplicity="0..1" />
+          <End Role="PostCode" Type="Self.PostCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxRate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostCode">
+              <PropertyRef Name="TaxRateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxRate_TypeTaxRate">
+          <End Role="TypeTax" Type="Self.TypeTax" Multiplicity="0..1" />
+          <End Role="TaxRate" Type="Self.TaxRate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeTax">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxRate">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaxRateDetail_TaxRate">
+          <End Role="TaxRate" Type="Self.TaxRate" Multiplicity="1" />
+          <End Role="TaxRateDetail" Type="Self.TaxRateDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaxRate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TaxRateDetail">
+              <PropertyRef Name="IdTaxRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="localdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Calculations" EntityType="Self.Calculation" />
+          <EntitySet Name="calculationDetails" EntityType="Self.calculationDetail" />
+          <EntitySet Name="Employes" EntityType="Self.Employe" />
+          <EntitySet Name="PostCodes" EntityType="Self.PostCode" />
+          <EntitySet Name="TaxRates" EntityType="Self.TaxRate" />
+          <EntitySet Name="TaxRateDetails" EntityType="Self.TaxRateDetail" />
+          <EntitySet Name="TypeTaxes" EntityType="Self.TypeTax" />
+          <AssociationSet Name="FK_calculationDetails_Calculation" Association="Self.FK_calculationDetails_Calculation">
+            <End Role="Calculation" EntitySet="Calculations" />
+            <End Role="calculationDetails" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calculationDetails_Employe" Association="Self.FK_calculationDetails_Employe">
+            <End Role="Employe" EntitySet="Employes" />
+            <End Role="calculationDetails" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employe_PostCode" Association="Self.FK_Employe_PostCode">
+            <End Role="PostCode" EntitySet="PostCodes" />
+            <End Role="Employe" EntitySet="Employes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostCode_TaxRate" Association="Self.FK_PostCode_TaxRate">
+            <End Role="TaxRate" EntitySet="TaxRates" />
+            <End Role="PostCode" EntitySet="PostCodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxRate_TypeTaxRate" Association="Self.FK_TaxRate_TypeTaxRate">
+            <End Role="TypeTax" EntitySet="TypeTaxes" />
+            <End Role="TaxRate" EntitySet="TaxRates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaxRateDetail_TaxRate" Association="Self.FK_TaxRateDetail_TaxRate">
+            <End Role="TaxRate" EntitySet="TaxRates" />
+            <End Role="TaxRateDetail" EntitySet="TaxRateDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="localdbModelStoreContainer" CdmEntityContainer="localdbEntities">
+          <EntitySetMapping Name="Calculations">
+            <EntityTypeMapping TypeName="localdbModel.Calculation">
+              <MappingFragment StoreEntitySet="Calculation">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="NamePayment" ColumnName="NamePayment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="calculationDetails">
+            <EntityTypeMapping TypeName="localdbModel.calculationDetail">
+              <MappingFragment StoreEntitySet="calculationDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmployeID" ColumnName="EmployeID" />
+                <ScalarProperty Name="DetailName" ColumnName="DetailName" />
+                <ScalarProperty Name="DetailValue" ColumnName="DetailValue" />
+                <ScalarProperty Name="IdCalculation" ColumnName="IdCalculation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employes">
+            <EntityTypeMapping TypeName="localdbModel.Employe">
+              <MappingFragment StoreEntitySet="Employe">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SocialName" ColumnName="SocialName" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="PostCodeId" ColumnName="PostCodeId" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostCodes">
+            <EntityTypeMapping TypeName="localdbModel.PostCode">
+              <MappingFragment StoreEntitySet="PostCode">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PostCodeName" ColumnName="PostCodeName" />
+                <ScalarProperty Name="TaxRateId" ColumnName="TaxRateId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaxRates">
+            <EntityTypeMapping TypeName="localdbModel.TaxRate">
+              <MappingFragment StoreEntitySet="TaxRate">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="NameTax" ColumnName="NameTax" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaxRateDetails">
+            <EntityTypeMapping TypeName="localdbModel.TaxRateDetail">
+              <MappingFragment StoreEntitySet="TaxRateDetail">
+                <ScalarProperty Name="IdTaxRate" ColumnName="IdTaxRate" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeTaxes">
+            <EntityTypeMapping TypeName="localdbModel.TypeTax">
+              <MappingFragment StoreEntitySet="TypeTax">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TaxType" ColumnName="TaxType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

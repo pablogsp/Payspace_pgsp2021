@@ -1,0 +1,492 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="localdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Calculation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="NamePayment" Type="nvarchar" MaxLength="100" />
+          <Property Name="DateGenerate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="calculationDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeID" Type="nvarchar" MaxLength="14" Nullable="false" />
+          <Property Name="DetailName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DetailValue" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="IdCalculation" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employe">
+          <Key>
+            <PropertyRef Name="CPF" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="SocialName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="CPF" Type="nvarchar" MaxLength="14" Nullable="false" />
+          <Property Name="PostCodeId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Salary" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Esocial_Layout">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Layout" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PendenciaEsocial">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Layout" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DataHora" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Recibo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mensage" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PostCodeName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="TaxRate" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RateValues">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TypeRate" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="From" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="To" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="Rate" Type="numeric" Precision="18" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Type">
+          <Key>
+            <PropertyRef Name="TypeRate" />
+          </Key>
+          <Property Name="TypeRate" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_calculationDetails_Calculation">
+          <End Role="Calculation" Type="Self.Calculation" Multiplicity="1" />
+          <End Role="calculationDetails" Type="Self.calculationDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calculation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="calculationDetails">
+              <PropertyRef Name="IdCalculation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calculationDetails_Employe">
+          <End Role="Employe" Type="Self.Employe" Multiplicity="1" />
+          <End Role="calculationDetails" Type="Self.calculationDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employe">
+              <PropertyRef Name="CPF" />
+            </Principal>
+            <Dependent Role="calculationDetails">
+              <PropertyRef Name="EmployeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employe_PostCode">
+          <End Role="PostCode" Type="Self.PostCode" Multiplicity="1" />
+          <End Role="Employe" Type="Self.Employe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employe">
+              <PropertyRef Name="PostCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PendenciaEsocial_ToTable">
+          <End Role="Esocial_Layout" Type="Self.Esocial_Layout" Multiplicity="1" />
+          <End Role="PendenciaEsocial" Type="Self.PendenciaEsocial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Esocial_Layout">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PendenciaEsocial">
+              <PropertyRef Name="Layout" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostCode_type">
+          <End Role="Type" Type="Self.Type" Multiplicity="1" />
+          <End Role="PostCode" Type="Self.PostCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="TypeRate" />
+            </Principal>
+            <Dependent Role="PostCode">
+              <PropertyRef Name="TaxRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RateValues_Type">
+          <End Role="Type" Type="Self.Type" Multiplicity="1" />
+          <End Role="RateValues" Type="Self.RateValues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="TypeRate" />
+            </Principal>
+            <Dependent Role="RateValues">
+              <PropertyRef Name="TypeRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="localdbModelStoreContainer">
+          <EntitySet Name="Calculation" EntityType="Self.Calculation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="calculationDetails" EntityType="Self.calculationDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employe" EntityType="Self.Employe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Esocial_Layout" EntityType="Self.Esocial_Layout" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PendenciaEsocial" EntityType="Self.PendenciaEsocial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostCode" EntityType="Self.PostCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RateValues" EntityType="Self.RateValues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_calculationDetails_Calculation" Association="Self.FK_calculationDetails_Calculation">
+            <End Role="Calculation" EntitySet="Calculation" />
+            <End Role="calculationDetails" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calculationDetails_Employe" Association="Self.FK_calculationDetails_Employe">
+            <End Role="Employe" EntitySet="Employe" />
+            <End Role="calculationDetails" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employe_PostCode" Association="Self.FK_Employe_PostCode">
+            <End Role="PostCode" EntitySet="PostCode" />
+            <End Role="Employe" EntitySet="Employe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PendenciaEsocial_ToTable" Association="Self.FK_PendenciaEsocial_ToTable">
+            <End Role="Esocial_Layout" EntitySet="Esocial_Layout" />
+            <End Role="PendenciaEsocial" EntitySet="PendenciaEsocial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostCode_type" Association="Self.FK_PostCode_type">
+            <End Role="Type" EntitySet="Type" />
+            <End Role="PostCode" EntitySet="PostCode" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RateValues_Type" Association="Self.FK_RateValues_Type">
+            <End Role="Type" EntitySet="Type" />
+            <End Role="RateValues" EntitySet="RateValues" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="localdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="localdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Calculations" EntityType="localdbModel.Calculation" />
+          <EntitySet Name="calculationDetails" EntityType="localdbModel.calculationDetail" />
+          <EntitySet Name="Employes" EntityType="localdbModel.Employe" />
+          <EntitySet Name="PostCodes" EntityType="localdbModel.PostCode" />
+          <EntitySet Name="Types" EntityType="localdbModel.Type" />
+          <AssociationSet Name="FK_calculationDetails_Calculation" Association="localdbModel.FK_calculationDetails_Calculation">
+            <End Role="Calculation" EntitySet="Calculations" />
+            <End Role="calculationDetail" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calculationDetails_Employe" Association="localdbModel.FK_calculationDetails_Employe">
+            <End Role="Employe" EntitySet="Employes" />
+            <End Role="calculationDetail" EntitySet="calculationDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employe_PostCode" Association="localdbModel.FK_Employe_PostCode">
+            <End Role="PostCode" EntitySet="PostCodes" />
+            <End Role="Employe" EntitySet="Employes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostCode_type" Association="localdbModel.FK_PostCode_type">
+            <End Role="Type" EntitySet="Types" />
+            <End Role="PostCode" EntitySet="PostCodes" />
+          </AssociationSet>
+          <EntitySet Name="RateValues" EntityType="localdbModel.RateValue" />
+          <AssociationSet Name="FK_RateValues_Type" Association="localdbModel.FK_RateValues_Type">
+            <End Role="Type" EntitySet="Types" />
+            <End Role="RateValue" EntitySet="RateValues" />
+          </AssociationSet>
+          <EntitySet Name="PendenciaEsocials" EntityType="localdbModel.PendenciaEsocial" />
+          <EntitySet Name="Esocial_Layout" EntityType="localdbModel.Esocial_Layout" />
+          <AssociationSet Name="FK_PendenciaEsocial_ToTable" Association="localdbModel.FK_PendenciaEsocial_ToTable">
+            <End Role="Esocial_Layout" EntitySet="Esocial_Layout" />
+            <End Role="PendenciaEsocial" EntitySet="PendenciaEsocials" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Calculation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="NamePayment" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DateGenerate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="calculationDetails" Relationship="localdbModel.FK_calculationDetails_Calculation" FromRole="Calculation" ToRole="calculationDetail" />
+        </EntityType>
+        <EntityType Name="calculationDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeID" Type="String" Nullable="false" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="DetailName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DetailValue" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="IdCalculation" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Calculation" Relationship="localdbModel.FK_calculationDetails_Calculation" FromRole="calculationDetail" ToRole="Calculation" />
+          <NavigationProperty Name="Employe" Relationship="localdbModel.FK_calculationDetails_Employe" FromRole="calculationDetail" ToRole="Employe" />
+        </EntityType>
+        <EntityType Name="Employe">
+          <Key>
+            <PropertyRef Name="CPF" />
+          </Key>
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SocialName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CPF" Type="String" Nullable="false" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="PostCodeId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Salary" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <NavigationProperty Name="calculationDetails" Relationship="localdbModel.FK_calculationDetails_Employe" FromRole="Employe" ToRole="calculationDetail" />
+          <NavigationProperty Name="PostCode" Relationship="localdbModel.FK_Employe_PostCode" FromRole="Employe" ToRole="PostCode" />
+        </EntityType>
+        <EntityType Name="PostCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostCodeName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="TaxRate" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employes" Relationship="localdbModel.FK_Employe_PostCode" FromRole="PostCode" ToRole="Employe" />
+          <NavigationProperty Name="Type" Relationship="localdbModel.FK_PostCode_type" FromRole="PostCode" ToRole="Type" />
+        </EntityType>
+        <EntityType Name="Type">
+          <Key>
+            <PropertyRef Name="TypeRate" />
+          </Key>
+          <Property Name="TypeRate" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PostCodes" Relationship="localdbModel.FK_PostCode_type" FromRole="Type" ToRole="PostCode" />
+          <NavigationProperty Name="RateValues" Relationship="localdbModel.FK_RateValues_Type" FromRole="Type" ToRole="RateValue" />
+        </EntityType>
+        <Association Name="FK_calculationDetails_Calculation">
+          <End Type="localdbModel.Calculation" Role="Calculation" Multiplicity="1" />
+          <End Type="localdbModel.calculationDetail" Role="calculationDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Calculation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="calculationDetail">
+              <PropertyRef Name="IdCalculation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calculationDetails_Employe">
+          <End Type="localdbModel.Employe" Role="Employe" Multiplicity="1" />
+          <End Type="localdbModel.calculationDetail" Role="calculationDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employe">
+              <PropertyRef Name="CPF" />
+            </Principal>
+            <Dependent Role="calculationDetail">
+              <PropertyRef Name="EmployeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employe_PostCode">
+          <End Type="localdbModel.PostCode" Role="PostCode" Multiplicity="1" />
+          <End Type="localdbModel.Employe" Role="Employe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PostCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employe">
+              <PropertyRef Name="PostCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostCode_type">
+          <End Type="localdbModel.Type" Role="Type" Multiplicity="1" />
+          <End Type="localdbModel.PostCode" Role="PostCode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="TypeRate" />
+            </Principal>
+            <Dependent Role="PostCode">
+              <PropertyRef Name="TaxRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RateValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TypeRate" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="From" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="To" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <NavigationProperty Name="Type" Relationship="localdbModel.FK_RateValues_Type" FromRole="RateValue" ToRole="Type" />
+        </EntityType>
+        <Association Name="FK_RateValues_Type">
+          <End Type="localdbModel.Type" Role="Type" Multiplicity="1" />
+          <End Type="localdbModel.RateValue" Role="RateValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="TypeRate" />
+            </Principal>
+            <Dependent Role="RateValue">
+              <PropertyRef Name="TypeRate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PendenciaEsocial">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Layout" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="DataHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Recibo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mensage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Esocial_Layout" Relationship="localdbModel.FK_PendenciaEsocial_ToTable" FromRole="PendenciaEsocial" ToRole="Esocial_Layout" />
+        </EntityType>
+        <EntityType Name="Esocial_Layout">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Layout" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PendenciaEsocials" Relationship="localdbModel.FK_PendenciaEsocial_ToTable" FromRole="Esocial_Layout" ToRole="PendenciaEsocial" />
+        </EntityType>
+        <Association Name="FK_PendenciaEsocial_ToTable">
+          <End Type="localdbModel.Esocial_Layout" Role="Esocial_Layout" Multiplicity="1" />
+          <End Type="localdbModel.PendenciaEsocial" Role="PendenciaEsocial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Esocial_Layout">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PendenciaEsocial">
+              <PropertyRef Name="Layout" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="localdbModelStoreContainer" CdmEntityContainer="localdbEntities">
+          <EntitySetMapping Name="Calculations">
+            <EntityTypeMapping TypeName="localdbModel.Calculation">
+              <MappingFragment StoreEntitySet="Calculation">
+                <ScalarProperty Name="DateGenerate" ColumnName="DateGenerate" />
+                <ScalarProperty Name="NamePayment" ColumnName="NamePayment" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="calculationDetails">
+            <EntityTypeMapping TypeName="localdbModel.calculationDetail">
+              <MappingFragment StoreEntitySet="calculationDetails">
+                <ScalarProperty Name="IdCalculation" ColumnName="IdCalculation" />
+                <ScalarProperty Name="DetailValue" ColumnName="DetailValue" />
+                <ScalarProperty Name="DetailName" ColumnName="DetailName" />
+                <ScalarProperty Name="EmployeID" ColumnName="EmployeID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employes">
+            <EntityTypeMapping TypeName="localdbModel.Employe">
+              <MappingFragment StoreEntitySet="Employe">
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="PostCodeId" ColumnName="PostCodeId" />
+                <ScalarProperty Name="CPF" ColumnName="CPF" />
+                <ScalarProperty Name="SocialName" ColumnName="SocialName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostCodes">
+            <EntityTypeMapping TypeName="localdbModel.PostCode">
+              <MappingFragment StoreEntitySet="PostCode">
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
+                <ScalarProperty Name="PostCodeName" ColumnName="PostCodeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Types">
+            <EntityTypeMapping TypeName="localdbModel.Type">
+              <MappingFragment StoreEntitySet="Type">
+                <ScalarProperty Name="TypeRate" ColumnName="TypeRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RateValues">
+            <EntityTypeMapping TypeName="localdbModel.RateValue">
+              <MappingFragment StoreEntitySet="RateValues">
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="TypeRate" ColumnName="TypeRate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PendenciaEsocials">
+            <EntityTypeMapping TypeName="localdbModel.PendenciaEsocial">
+              <MappingFragment StoreEntitySet="PendenciaEsocial">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Mensage" ColumnName="Mensage" />
+                <ScalarProperty Name="Recibo" ColumnName="Recibo" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DataHora" ColumnName="DataHora" />
+                <ScalarProperty Name="Layout" ColumnName="Layout" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Esocial_Layout">
+            <EntityTypeMapping TypeName="localdbModel.Esocial_Layout">
+              <MappingFragment StoreEntitySet="Esocial_Layout">
+                <ScalarProperty Name="Layout" ColumnName="Layout" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
